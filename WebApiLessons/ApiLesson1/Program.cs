@@ -1,4 +1,5 @@
 
+
 namespace ApiLesson1
 {
     public class Program
@@ -12,14 +13,17 @@ namespace ApiLesson1
             builder.Services.AddControllers();
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
+            builder.Services.AddSwaggerGen();
 
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
-            //if (app.Environment.IsDevelopment())
-            //{
-            //    app.MapOpenApi();
-            //}
+            if (app.Environment.IsDevelopment())
+            {
+                app.MapOpenApi();
+                app.UseSwagger();
+                app.UseSwaggerUI();
+            }
 
             //app.UseHttpsRedirection();
 
@@ -28,16 +32,18 @@ namespace ApiLesson1
 
             //app.MapControllers();
 
-            app.Run(async c =>
-            {
-                await c.Response.WriteAsync("Login...");
-                //await context.Response.WriteAsync("Hello World!");
-            });
+            //app.Run(c=> c.Response.WriteAsync("Yosi Login..."));
 
-            app.Run(async c =>
-            {
-                await c.Response.WriteAsync("Hello World!");
-            });
+            //app.Run(async c =>
+            //{
+            //    await c.Response.WriteAsync("Login...");
+            //    //await context.Response.WriteAsync("Hello World!");
+            //});
+
+            //app.Run(async c =>
+            //{
+            //    await c.Response.WriteAsync("Hello World!");
+            //});
 
             app.Run();
         }
