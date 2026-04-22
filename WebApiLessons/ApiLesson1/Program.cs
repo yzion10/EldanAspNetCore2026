@@ -25,12 +25,12 @@ namespace ApiLesson1
                 app.UseSwaggerUI();
             }
 
-            //app.UseHttpsRedirection();
+            app.UseHttpsRedirection();
 
-            //app.UseAuthorization();
+            app.UseAuthorization();
 
 
-            //app.MapControllers();
+            app.MapControllers();
 
             //app.Run(c=> c.Response.WriteAsync("Yosi Login..."));
 
