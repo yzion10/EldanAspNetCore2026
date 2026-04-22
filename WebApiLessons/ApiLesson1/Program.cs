@@ -16,17 +16,28 @@ namespace ApiLesson1
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
+            //if (app.Environment.IsDevelopment())
+            //{
+            //    app.MapOpenApi();
+            //}
+
+            //app.UseHttpsRedirection();
+
+            //app.UseAuthorization();
+
+
+            //app.MapControllers();
+
+            app.Run(async c =>
             {
-                app.MapOpenApi();
-            }
+                await c.Response.WriteAsync("Login...");
+                //await context.Response.WriteAsync("Hello World!");
+            });
 
-            app.UseHttpsRedirection();
-
-            app.UseAuthorization();
-
-
-            app.MapControllers();
+            app.Run(async c =>
+            {
+                await c.Response.WriteAsync("Hello World!");
+            });
 
             app.Run();
         }
