@@ -26,5 +26,15 @@ namespace ApiLesson1.Controllers
 
             return city;
         }
+
+        [HttpGet("GetCitiesHardCoded")]
+        public List<CityDTO> GetCities1()
+        {
+            return new List<CityDTO>()
+            {
+                new CityDTO{ ID = 1, Name = "Tel-Aviv" },
+                new CityDTO{ ID = 2, Name = "Jerusalem" },
+            };
+        }
     }
 }
