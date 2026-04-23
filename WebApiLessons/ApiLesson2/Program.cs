@@ -9,7 +9,12 @@ namespace ApiLesson2
 
             // Add services to the container.
 
-            builder.Services.AddControllers();
+            builder.Services.AddControllers(o =>
+            {
+                // אם הלקוח מבקש פורמט לא נתמך נחזיר 406 Not Acceptable
+                o.ReturnHttpNotAcceptable = true; 
+            }).AddXmlDataContractSerializerFormatters();
+
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
             builder.Services.AddSwaggerGen();
