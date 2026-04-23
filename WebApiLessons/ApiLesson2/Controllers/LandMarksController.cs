@@ -1,4 +1,5 @@
 ﻿using ApiLesson2.DataStores;
+using ApiLesson2.DTO;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ApiLesson2.Controllers
@@ -8,7 +9,7 @@ namespace ApiLesson2.Controllers
     public class LandMarksController : Controller
     {
         [HttpGet]
-        public ActionResult GetLandMarks(int cityID)
+        public ActionResult<IEnumerable<LandMarkDTO>> GetLandMarks(int cityID)
         {
             var city = CitiesDataStore.Current.FirstOrDefault(c => c.ID == cityID);
 
@@ -19,7 +20,7 @@ namespace ApiLesson2.Controllers
         }
 
         [HttpGet("{landMarkID}")]
-        public ActionResult GetLandMark(int cityID, int landMarkID)
+        public ActionResult<LandMarkDTO> GetLandMark(int cityID, int landMarkID)
         {
             var city = CitiesDataStore.Current.FirstOrDefault(c => c.ID == cityID);
 
