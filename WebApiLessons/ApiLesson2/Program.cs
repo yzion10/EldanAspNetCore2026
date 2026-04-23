@@ -15,7 +15,9 @@ namespace ApiLesson2
             {
                 // אם הלקוח מבקש פורמט לא נתמך נחזיר 406 Not Acceptable
                 //o.ReturnHttpNotAcceptable = true; 
-            }).AddXmlDataContractSerializerFormatters();
+            })
+            .AddXmlDataContractSerializerFormatters()
+            .AddNewtonsoftJson(); // אם נרצה להשתמש ב-NewtonsoftJson במקום ב-System.Text.Json
 
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
