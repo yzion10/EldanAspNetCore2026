@@ -13,6 +13,17 @@ namespace ApiLesson2
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
             builder.Services.AddSwaggerGen();
+            builder.Services.AddProblemDetails(o =>
+            {
+                o.CustomizeProblemDetails = (context) =>
+                {
+                    context.ProblemDetails.Extensions.Add("AppName", "ApiLesson2");
+
+                    // רק בפיתוח נוסיף את שם המכונה ל-ProblemDetails
+                    if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
+                        context.ProblemDetails.Extensions.Add("MachineName", Environment.MachineName);
+                };
+            });
 
             var app = builder.Build();
 
