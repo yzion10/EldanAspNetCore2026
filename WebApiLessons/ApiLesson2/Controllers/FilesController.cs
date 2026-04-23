@@ -1,6 +1,7 @@
 ﻿using ApiLesson2.DataStores;
 using ApiLesson2.DTO;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.StaticFiles;
 
 namespace ApiLesson2.Controllers
 {
@@ -8,6 +9,13 @@ namespace ApiLesson2.Controllers
     [Route("api/files")]
     public class FilesController : ControllerBase
     {
+        private FileExtensionContentTypeProvider _contentTypeProvider;
+
+        public FilesController(FileExtensionContentTypeProvider contentTypeProvider)
+        {
+            _contentTypeProvider = contentTypeProvider;
+        }
+
         [HttpGet("{name}")]
         public ActionResult GetFile(string name)
         {
@@ -20,7 +28,10 @@ namespace ApiLesson2.Controllers
                 return NotFound();
 
             var data = System.IO.File.ReadAllBytes(path);
-            return File(data, "text/plain", name);
+
+            // מציאת סוג התוכן לפי סיומת הקובץ, אם לא נמצא נשתמש בסוג תוכן כללי
+            _contentTypeProvider.TryGetContentType(path, out var contentType);
+            return File(data, contentType ?? "application/octet-stream", name);
         }
     }
 }

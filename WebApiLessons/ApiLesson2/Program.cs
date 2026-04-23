@@ -1,4 +1,6 @@
 
+using Microsoft.AspNetCore.StaticFiles;
+
 namespace ApiLesson2
 {
     public class Program
@@ -29,6 +31,8 @@ namespace ApiLesson2
                         context.ProblemDetails.Extensions.Add("MachineName", Environment.MachineName);
                 };
             });
+
+            builder.Services.AddSingleton<FileExtensionContentTypeProvider>();
 
             var app = builder.Build();
 
