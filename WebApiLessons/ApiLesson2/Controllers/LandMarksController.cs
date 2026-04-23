@@ -1,5 +1,6 @@
 ﻿using ApiLesson2.DataStores;
 using ApiLesson2.DTO;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ApiLesson2.Controllers
@@ -86,7 +87,7 @@ namespace ApiLesson2.Controllers
 
         [HttpPatch("{landMarkID}")]
         public ActionResult PatchLandMark(int cityID, int landMarkID,
-           LandMarkForUpdateDTO updatedLandMark)
+           JsonPatchDocument<LandMarkForUpdateDTO> patchDoc)
         {
             var city = CitiesDataStore.Current.FirstOrDefault(c => c.ID == cityID);
             if (city == null)
@@ -96,8 +97,19 @@ namespace ApiLesson2.Controllers
             if (landMark == null)
                 return NotFound();
 
-            landMark.Name = updatedLandMark.Name ?? landMark.Name;
-            landMark.Description = updatedLandMark.Description;
+            // Create a LandMarkForUpdateDTO from the existing LandMarkDTO
+            var landMarkToPatch = new LandMarkForUpdateDTO
+            {
+                Name = landMark.Name,
+                Description = landMark.Description
+            };
+
+            // זה ה patch doc
+            patchDoc.ApplyTo(landMarkToPatch);
+
+            // Update the original landmark with patched values
+            landMark.Name = landMarkToPatch.Name;
+            landMark.Description = landMarkToPatch.Description;
 
             return NoContent();
         }
