@@ -19,7 +19,8 @@ namespace ApiLesson2.Controllers
             return Ok(city.LandMarks);
         }
 
-        [HttpGet("{landMarkID}", Name = "GetLandMark")]
+        //[HttpGet("{landMarkID}", Name = "GetLandMark")]
+        [HttpGet("{landMarkID}")]
         public ActionResult<LandMarkDTO> GetLandMark(int cityID, int landMarkID)
         {
             var city = CitiesDataStore.Current.FirstOrDefault(c => c.ID == cityID);
@@ -56,7 +57,12 @@ namespace ApiLesson2.Controllers
 
             // נעדיף להחזיר 201 Created
             // עם כתובת המשאב החדש
-            return CreatedAtRoute("GetLandMark",
+            //return CreatedAtRoute("GetLandMark",
+            //    new { cityID = cityID, landMarkID = finalLandMark.Id }, finalLandMark);
+
+            // נעדיף להשתמש ב- CreatedAtAction שמאפשר לנו להצביע על הפעולה שמחזירה את המשאב החדש
+            // במקום להגדיר שם לנתיב, נצביע על הפעולה שמחזירה את המשאב החדש
+            return CreatedAtAction(nameof(GetLandMark),
                 new { cityID = cityID, landMarkID = finalLandMark.Id }, finalLandMark);
         }
     }
