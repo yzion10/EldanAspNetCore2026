@@ -36,5 +36,18 @@ namespace ApiLesson2.Controllers
                 new CityDTO{ ID = 2, Name = "Jerusalem" },
             };
         }
+
+        [HttpGet("problem")]
+        public ActionResult MakeAProblem()
+        {
+            var problem = new ProblemDetails
+            {
+                Status = 500,
+                Title = "Something went wrong",
+                Detail = "An unexpected error occurred while processing your request."
+            };
+
+            return StatusCode(500, problem);
+        }
     }
 }
