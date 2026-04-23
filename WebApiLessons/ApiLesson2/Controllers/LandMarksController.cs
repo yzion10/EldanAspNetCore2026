@@ -19,7 +19,7 @@ namespace ApiLesson2.Controllers
             return Ok(city.LandMarks);
         }
 
-        [HttpGet("{landMarkID}")]
+        [HttpGet("{landMarkID}", Name = "GetLandMark")]
         public ActionResult<LandMarkDTO> GetLandMark(int cityID, int landMarkID)
         {
             var city = CitiesDataStore.Current.FirstOrDefault(c => c.ID == cityID);
@@ -52,7 +52,12 @@ namespace ApiLesson2.Controllers
 
             ((List<LandMarkDTO>)city.LandMarks).Add(finalLandMark);
 
-            return Ok(finalLandMark);
+            //return Ok(finalLandMark);
+
+            // נעדיף להחזיר 201 Created
+            // עם כתובת המשאב החדש
+            return CreatedAtRoute("GetLandMark",
+                new { cityID = cityID, landMarkID = finalLandMark.Id }, finalLandMark);
         }
     }
 }
