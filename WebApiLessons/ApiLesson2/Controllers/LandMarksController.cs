@@ -6,7 +6,7 @@ namespace ApiLesson2.Controllers
 {
     [ApiController]
     [Route("api/cities/{cityID}/landmarks")]
-    public class LandMarksController : Controller
+    public class LandMarksController : ControllerBase
     {
         [HttpGet]
         public ActionResult<IEnumerable<LandMarkDTO>> GetLandMarks(int cityID)
