@@ -34,6 +34,26 @@ namespace ApiLesson2.Controllers
 
             return Ok(landMark);
         }
+
+        [HttpPost]
+        public ActionResult<LandMarkDTO> AddLandMark(int cityID, LandMarkForCreateDTO newLandMark)
+        {
+            var city = CitiesDataStore.Current.FirstOrDefault(c => c.ID == cityID);
+
+            if (city == null)
+                return NotFound();
+
+            var finalLandMark = new LandMarkDTO
+            {
+                Id = city.LandMarks.Max(l => l.Id) + 1,
+                Name = newLandMark.Name,
+                Description = newLandMark.Description
+            };
+
+            ((List<LandMarkDTO>)city.LandMarks).Add(finalLandMark);
+
+            return Ok(finalLandMark);
+        }
     }
 }
 
