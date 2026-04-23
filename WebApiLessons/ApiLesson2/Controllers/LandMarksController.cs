@@ -65,6 +65,24 @@ namespace ApiLesson2.Controllers
             return CreatedAtAction(nameof(GetLandMark),
                 new { cityID = cityID, landMarkID = finalLandMark.Id }, finalLandMark);
         }
+
+        [HttpPut("{landMarkID}")]
+        public ActionResult UpdateLandMark(int cityID, int landMarkID,
+            LandMarkForUpdateDTO updatedLandMark)
+        {
+            var city = CitiesDataStore.Current.FirstOrDefault(c => c.ID == cityID);
+            if (city == null)
+                return NotFound();
+
+            var landMark = city.LandMarks.FirstOrDefault(l => l.Id == landMarkID);
+            if (landMark == null)
+                return NotFound();
+
+            landMark.Name = updatedLandMark.Name ?? landMark.Name;
+            landMark.Description = updatedLandMark.Description;
+
+            return NoContent();
+        }
     }
 }
 
