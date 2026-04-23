@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace ApiLesson2.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/cities")]
     public class CitiesController : ControllerBase
     {
         [HttpGet]
