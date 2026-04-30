@@ -1,5 +1,6 @@
 
 using Microsoft.AspNetCore.StaticFiles;
+using Serilog;
 
 namespace ApiLesson3
 {
@@ -7,9 +8,17 @@ namespace ApiLesson3
     {
         public static void Main(string[] args)
         {
+            // Serilog
+            Log.Logger = new LoggerConfiguration()
+                .WriteTo.Console()
+                .WriteTo.File("logs/log-.txt", rollingInterval: RollingInterval.Minute)
+                .CreateBootstrapLogger();
+
             // DI - Dependency Injection
-            
+
             var builder = WebApplication.CreateBuilder(args);
+
+            builder.Host.UseSerilog();
 
             // ניקוי כל הלוגים - לא נשתמש בזה
             // נשתמש בזה רק אם נרצה לעבוד מול מערכת לוגים צד שלישי כמו לדוגמא Serilog או NLog
