@@ -1,0 +1,59 @@
+
+using Microsoft.AspNetCore.StaticFiles;
+
+namespace ApiLesson3
+{
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+            var builder = WebApplication.CreateBuilder(args);
+
+            // Add services to the container.
+
+            builder.Services.AddControllers(o =>
+            {
+                // אם הלקוח מבקש פורמט לא נתמך נחזיר 406 Not Acceptable
+                //o.ReturnHttpNotAcceptable = true; 
+            })
+            .AddXmlDataContractSerializerFormatters()
+            .AddNewtonsoftJson(); // אם נרצה להשתמש ב-NewtonsoftJson במקום ב-System.Text.Json
+
+            // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+            builder.Services.AddOpenApi();
+            builder.Services.AddSwaggerGen();
+            builder.Services.AddProblemDetails(o =>
+            {
+                o.CustomizeProblemDetails = (context) =>
+                {
+                    context.ProblemDetails.Extensions.Add("AppName", "ApiLesson2");
+
+                    // רק בפיתוח נוסיף את שם המכונה ל-ProblemDetails
+                    if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
+                        context.ProblemDetails.Extensions.Add("MachineName", Environment.MachineName);
+                };
+            });
+
+            builder.Services.AddSingleton<FileExtensionContentTypeProvider>();
+
+            var app = builder.Build();
+
+            // Configure the HTTP request pipeline.
+            if (app.Environment.IsDevelopment())
+            {
+                app.MapOpenApi();
+                app.UseSwagger();
+                app.UseSwaggerUI();
+            }
+
+            app.UseHttpsRedirection();
+
+            app.UseAuthorization();
+
+
+            app.MapControllers();
+
+            app.Run();
+        }
+    }
+}

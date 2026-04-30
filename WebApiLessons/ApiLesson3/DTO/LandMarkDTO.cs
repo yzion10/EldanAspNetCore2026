@@ -1,0 +1,9 @@
+﻿namespace ApiLesson3.DTO
+{
+    public class LandMarkDTO
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+    }
+}
