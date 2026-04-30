@@ -27,17 +27,19 @@ namespace ApiLesson3
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
             builder.Services.AddSwaggerGen();
-            builder.Services.AddProblemDetails(o =>
-            {
-                o.CustomizeProblemDetails = (context) =>
-                {
-                    context.ProblemDetails.Extensions.Add("AppName", "ApiLesson2");
+            //builder.Services.AddProblemDetails(o =>
+            //{
+            //    o.CustomizeProblemDetails = (context) =>
+            //    {
+            //        context.ProblemDetails.Extensions.Add("AppName", "ApiLesson2");
 
-                    // רק בפיתוח נוסיף את שם המכונה ל-ProblemDetails
-                    if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
-                        context.ProblemDetails.Extensions.Add("MachineName", Environment.MachineName);
-                };
-            });
+            //        // רק בפיתוח נוסיף את שם המכונה ל-ProblemDetails
+            //        if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
+            //            context.ProblemDetails.Extensions.Add("MachineName", Environment.MachineName);
+            //    };
+            //});
+
+            builder.Services.AddProblemDetails();
 
             builder.Services.AddSingleton<FileExtensionContentTypeProvider>();
 
@@ -49,6 +51,11 @@ namespace ApiLesson3
                 app.MapOpenApi();
                 app.UseSwagger();
                 app.UseSwaggerUI();
+            }
+            else
+            {
+                // במצב פרודקשן נרצה לטפל בשגיאות בצורה מרכזית במקום להראות את הסטאק טרייס ללקוח
+                app.UseExceptionHandler();
             }
 
             app.UseHttpsRedirection();

@@ -25,7 +25,7 @@ namespace ApiLesson3.Controllers
         {
             try
             {
-                //throw new Exception("This is a test exception to demonstrate error handling and logging.");
+                throw new Exception("This is a test exception to demonstrate error handling and logging.");
 
                 var city = CitiesDataStore.Current.FirstOrDefault(c => c.ID == cityID);
 
