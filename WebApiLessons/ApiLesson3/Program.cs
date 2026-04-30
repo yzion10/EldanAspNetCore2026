@@ -10,9 +10,13 @@ namespace ApiLesson3
         {
             // Serilog
             Log.Logger = new LoggerConfiguration()
-                .WriteTo.Console()
+                //.WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss}] {SourceContext} - {Message:lj}{NewLine}{Exception}")
+                //.WriteTo.Console()
+                .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} [{MachineName}] (Thread {ThreadId})] {SourceContext} - {Message:lj}{NewLine}{Exception}")
                 .WriteTo.File("logs/log-.txt", rollingInterval: RollingInterval.Minute)
-                .CreateBootstrapLogger();
+                .Enrich.WithMachineName()
+                .Enrich.WithThreadId()
+                .CreateLogger();
 
             // DI - Dependency Injection
 
