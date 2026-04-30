@@ -1,4 +1,5 @@
 
+using ApiLesson3.Services;
 using Microsoft.AspNetCore.StaticFiles;
 using Serilog;
 
@@ -8,14 +9,18 @@ namespace ApiLesson3
     {
         public static void Main(string[] args)
         {
+            string template = "{Timestamp:dd-MM-yyyy} [{MachineName}-{ThreadId}] ({RequestId}) {Message}{NewLine}{Properties}{NewLine}{NewLine}";
+
             // Serilog
             Log.Logger = new LoggerConfiguration()
                 //.WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss}] {SourceContext} - {Message:lj}{NewLine}{Exception}")
                 //.WriteTo.Console()
-                .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} [{MachineName}] (Thread {ThreadId})] {SourceContext} - {Message:lj}{NewLine}{Exception}")
-                .WriteTo.File("logs/log-.txt", rollingInterval: RollingInterval.Minute)
-                .Enrich.WithMachineName()
+                .WriteTo.Console(outputTemplate: template)
+                //.WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} [{MachineName}] (Thread {ThreadId})] {SourceContext} - {Message:lj}{NewLine}{Exception}")
+                .WriteTo.File("logs/log-.txt", rollingInterval: RollingInterval.Minute, outputTemplate: template)
+                //.Enrich.WithMachineName()
                 .Enrich.WithThreadId()
+                .Enrich.FromLogContext()
                 .CreateLogger();
 
             // DI - Dependency Injection
@@ -55,6 +60,19 @@ namespace ApiLesson3
             builder.Services.AddProblemDetails();
 
             builder.Services.AddSingleton<FileExtensionContentTypeProvider>();
+
+//#if DEBUG
+            //builder.Services.AddTransient<IEmailService, DevelopmentEmailService>();
+            //builder.Services.AddSingleton<IEmailService, DevelopmentEmailService>();
+            builder.Services.AddScoped<IEmailService, DevelopmentEmailService>();
+//#else
+            //builder.Services.AddTransient<IEmailService, ProductionEmailService>();
+//#endif
+
+            // AddTransient - כל פעם שנשתמש באובייקט יווצר מופע חדש של כל האובייקט
+            // AddScoped - כל פעם שנשתמש בקונטרולר יווצר מופע חדש של כל האובייקט
+            // כשנפנה לקונטרולר אחר יווצר מופע חדש של כל האובייקט
+            // AddSingleton - כל פעם שנשתמש באובייקט נקבל את אותו מופע של כל האובייקט. נוצר פעם אחת בזיכרון
 
             var app = builder.Build();
 

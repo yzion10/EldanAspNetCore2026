@@ -1,5 +1,6 @@
 ﻿using ApiLesson3.DataStores;
 using ApiLesson3.DTO;
+using ApiLesson3.Services;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,14 +11,16 @@ namespace ApiLesson3.Controllers
     public class LandMarksController : ControllerBase
     {
         private readonly ILogger<LandMarksController> _logger;
+        private readonly IEmailService _email;
 
-        public LandMarksController(ILogger<LandMarksController> logger)
+        public LandMarksController(ILogger<LandMarksController> logger, IEmailService email)
         {
             // לא חובה לבדוק כי זה לא יהיה null
             // אבל זה לא יזיק לבדוק
             //_logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
             _logger = logger;
+            _email = email;
         }
 
         [HttpGet]
@@ -25,7 +28,7 @@ namespace ApiLesson3.Controllers
         {
             try
             {
-                throw new Exception("This is a test exception to demonstrate error handling and logging.");
+                //throw new Exception("This is a test exception to demonstrate error handling and logging.");
 
                 var city = CitiesDataStore.Current.FirstOrDefault(c => c.ID == cityID);
 
@@ -36,6 +39,8 @@ namespace ApiLesson3.Controllers
                 }
 
                 _logger.LogInformation($"Returning {city.LandMarks.Count()} landmarks for city with ID {cityID}");
+
+                _email.Send("Landmarks Retrieved", $"Landmarks for city with ID {cityID} were retrieved.");
 
                 return Ok(city.LandMarks);
             }

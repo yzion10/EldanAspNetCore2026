@@ -1,6 +1,8 @@
 ﻿using ApiLesson3.DataStores;
 using ApiLesson3.DTO;
+using ApiLesson3.Services;
 using Microsoft.AspNetCore.Mvc;
+using Serilog.Context;
 
 namespace ApiLesson3.Controllers
 {
@@ -9,17 +11,29 @@ namespace ApiLesson3.Controllers
     public class CitiesController : ControllerBase
     {
         private readonly ILogger<CitiesController> _logger;
+        private readonly IEmailService _email;
 
-        public CitiesController(ILogger<CitiesController> logger)
+        public CitiesController(ILogger<CitiesController> logger, IEmailService email)
         {
             _logger = logger;
+            _email = email;
         }
 
         [HttpGet]
         public IEnumerable<CityDTO> GetCities()
         {
-            _logger.LogInformation("Getting all cities");
-            return CitiesDataStore.Current;
+            _logger.LogInformation("No Property here");
+
+            using (LogContext.PushProperty("SessionID", Guid.NewGuid()))
+            {
+                //_logger.LogInformation("Getting all cities");
+                _logger.LogInformation("Getting all cities from data store");
+                _logger.LogInformation($"Number of cities in data store: {CitiesDataStore.Current.Count}");
+
+                _email.Send("Cities Retrieved", $"All cities were retrieved. Total count: {CitiesDataStore.Current.Count}");
+
+                return CitiesDataStore.Current;
+            }
         }
 
         [HttpGet("{id}")]
@@ -38,6 +52,8 @@ namespace ApiLesson3.Controllers
             }
 
             _logger.LogInformation($"Returning city with ID {id}");
+
+            _email.Send("City Retrieved", $"City with ID {id} was retrieved.");
 
             return city;
         }
