@@ -23,14 +23,27 @@ namespace ApiLesson3.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<LandMarkDTO>> GetLandMarks(int cityID)
         {
-            var city = CitiesDataStore.Current.FirstOrDefault(c => c.ID == cityID);
+            try
+            {
+                throw new Exception("This is a test exception to demonstrate error handling and logging.");
 
-            if (city == null)
-                return NotFound();
+                var city = CitiesDataStore.Current.FirstOrDefault(c => c.ID == cityID);
 
-            _logger.LogInformation($"Returning {city.LandMarks.Count()} landmarks for city with ID {cityID}");
+                if (city == null)
+                {
+                    _logger.LogInformation($"City with ID {cityID} not found when trying to get landmarks");
+                    return NotFound();
+                }
 
-            return Ok(city.LandMarks);
+                _logger.LogInformation($"Returning {city.LandMarks.Count()} landmarks for city with ID {cityID}");
+
+                return Ok(city.LandMarks);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"An error occurred while getting landmarks for city with ID {cityID}");
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
         }
 
         //[HttpGet("{landMarkID}", Name = "GetLandMark")]
