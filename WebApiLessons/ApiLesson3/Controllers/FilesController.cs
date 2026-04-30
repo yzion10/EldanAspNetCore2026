@@ -10,10 +10,12 @@ namespace ApiLesson3.Controllers
     public class FilesController : ControllerBase
     {
         private FileExtensionContentTypeProvider _contentTypeProvider;
+        private readonly ILogger<FilesController> _logger;
 
-        public FilesController(FileExtensionContentTypeProvider contentTypeProvider)
+        public FilesController(FileExtensionContentTypeProvider contentTypeProvider, ILogger<FilesController> logger)
         {
             _contentTypeProvider = contentTypeProvider;
+            _logger = logger;
         }
 
         [HttpGet("{name}")]
@@ -31,6 +33,9 @@ namespace ApiLesson3.Controllers
 
             // מציאת סוג התוכן לפי סיומת הקובץ, אם לא נמצא נשתמש בסוג תוכן כללי
             _contentTypeProvider.TryGetContentType(path, out var contentType);
+
+            _logger.LogInformation($"Returning file {name} with content type {contentType ?? "application/octet-stream"}");
+
             return File(data, contentType ?? "application/octet-stream", name);
         }
 
@@ -41,8 +46,8 @@ namespace ApiLesson3.Controllers
                 return BadRequest("File is too big");
 
             var baseDir = @"C:\Sources\GIT\CourseAspNetCore2026\Eldan";
-            var path = Path.Combine(baseDir, file.FileName);
-            
+            var path = Path.Combine(baseDir, Guid.NewGuid().ToString() + $"_{file.FileName}");
+
             using (var stream = new FileStream(path, FileMode.Create))
                 await file.CopyToAsync(stream);
 

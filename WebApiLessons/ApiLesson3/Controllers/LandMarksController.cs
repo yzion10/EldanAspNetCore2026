@@ -9,6 +9,17 @@ namespace ApiLesson3.Controllers
     [Route("api/cities/{cityID}/landmarks")]
     public class LandMarksController : ControllerBase
     {
+        private readonly ILogger<LandMarksController> _logger;
+
+        public LandMarksController(ILogger<LandMarksController> logger)
+        {
+            // לא חובה לבדוק כי זה לא יהיה null
+            // אבל זה לא יזיק לבדוק
+            //_logger = logger ?? throw new ArgumentNullException(nameof(logger));
+
+            _logger = logger;
+        }
+
         [HttpGet]
         public ActionResult<IEnumerable<LandMarkDTO>> GetLandMarks(int cityID)
         {
@@ -16,6 +27,8 @@ namespace ApiLesson3.Controllers
 
             if (city == null)
                 return NotFound();
+
+            _logger.LogInformation($"Returning {city.LandMarks.Count()} landmarks for city with ID {cityID}");
 
             return Ok(city.LandMarks);
         }

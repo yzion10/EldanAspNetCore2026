@@ -8,21 +8,36 @@ namespace ApiLesson3.Controllers
     [Route("api/cities")]
     public class CitiesController : ControllerBase
     {
+        private readonly ILogger<CitiesController> _logger;
+
+        public CitiesController(ILogger<CitiesController> logger)
+        {
+            _logger = logger;
+        }
+
         [HttpGet]
         public IEnumerable<CityDTO> GetCities()
         {
+            _logger.LogInformation("Getting all cities");
             return CitiesDataStore.Current;
         }
 
         [HttpGet("{id}")]
         public ActionResult<CityDTO> GetCity(int id)
         {
+            _logger.LogInformation($"Getting city with ID {id}");
+
             var city = CitiesDataStore.
                 Current.
                 FirstOrDefault(c => c.ID == id);
 
             if (city == null)
+            {
+                _logger.LogWarning($"City with ID {id} not found");
                 return NotFound();
+            }
+
+            _logger.LogInformation($"Returning city with ID {id}");
 
             return city;
         }

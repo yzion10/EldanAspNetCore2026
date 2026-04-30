@@ -7,10 +7,15 @@ namespace ApiLesson3
     {
         public static void Main(string[] args)
         {
+            // DI - Dependency Injection
+            
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
+            // ניקוי כל הלוגים - לא נשתמש בזה
+            // נשתמש בזה רק אם נרצה לעבוד מול מערכת לוגים צד שלישי כמו לדוגמא Serilog או NLog
+            //builder.Logging.ClearProviders();
 
+            // Add services to the container.
             builder.Services.AddControllers(o =>
             {
                 // אם הלקוח מבקש פורמט לא נתמך נחזיר 406 Not Acceptable
@@ -47,12 +52,8 @@ namespace ApiLesson3
             }
 
             app.UseHttpsRedirection();
-
             app.UseAuthorization();
-
-
             app.MapControllers();
-
             app.Run();
         }
     }
