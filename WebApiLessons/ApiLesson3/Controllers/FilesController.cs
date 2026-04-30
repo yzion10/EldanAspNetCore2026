@@ -33,5 +33,20 @@ namespace ApiLesson3.Controllers
             _contentTypeProvider.TryGetContentType(path, out var contentType);
             return File(data, contentType ?? "application/octet-stream", name);
         }
+
+        [HttpPost]
+        public async Task<ActionResult> UploadFile(IFormFile file)
+        {
+            if (file.Length > 1000000)
+                return BadRequest("File is too big");
+
+            var baseDir = @"C:\Sources\GIT\CourseAspNetCore2026\Eldan";
+            var path = Path.Combine(baseDir, file.FileName);
+            
+            using (var stream = new FileStream(path, FileMode.Create))
+                await file.CopyToAsync(stream);
+
+            return NoContent();
+        }
     }
 }
