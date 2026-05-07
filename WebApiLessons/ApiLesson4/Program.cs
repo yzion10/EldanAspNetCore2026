@@ -93,9 +93,16 @@ namespace ApiLesson4
             // עדכון בסיס הנתונים על בסיס המיגרציות שנוצרו
             // dotnet ef database update
 
-
+            // dotnet ef database update --migration "InitialDB" - כדי לעדכן את בסיס הנתונים למיגרציה ספציפית
 
             var app = builder.Build();
+
+            // הרצת המיגרציות אוטומטית עם הרצת האפליקציה
+            using (var scope = app.Services.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<MainContext>();
+                dbContext.Database.Migrate();
+            }
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
