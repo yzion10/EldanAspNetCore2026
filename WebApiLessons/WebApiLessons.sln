@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiLesson2", "ApiLesson2\Ap
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiLesson3", "ApiLesson3\ApiLesson3.csproj", "{02F80B4A-4255-44AC-8D22-4571ABE530A0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiLesson4_MinApi", "ApiLesson4_MinApi\ApiLesson4_MinApi.csproj", "{37F3BC62-00B2-4D56-B73B-9EFDC742B1D7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiLesson4", "ApiLesson4\ApiLesson4.csproj", "{12B92949-732B-42DC-BCBF-85DC31BC1CFB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +31,14 @@ Global
 		{02F80B4A-4255-44AC-8D22-4571ABE530A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{02F80B4A-4255-44AC-8D22-4571ABE530A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{02F80B4A-4255-44AC-8D22-4571ABE530A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{37F3BC62-00B2-4D56-B73B-9EFDC742B1D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37F3BC62-00B2-4D56-B73B-9EFDC742B1D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37F3BC62-00B2-4D56-B73B-9EFDC742B1D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37F3BC62-00B2-4D56-B73B-9EFDC742B1D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{12B92949-732B-42DC-BCBF-85DC31BC1CFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{12B92949-732B-42DC-BCBF-85DC31BC1CFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{12B92949-732B-42DC-BCBF-85DC31BC1CFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{12B92949-732B-42DC-BCBF-85DC31BC1CFB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
