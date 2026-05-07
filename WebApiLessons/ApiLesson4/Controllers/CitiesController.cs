@@ -1,4 +1,5 @@
 ﻿using ApiLesson4.DataStores;
+using ApiLesson4.DbContexts;
 using ApiLesson4.DTO;
 using ApiLesson4.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -12,28 +13,56 @@ namespace ApiLesson4.Controllers
     {
         private readonly ILogger<CitiesController> _logger;
         private readonly IEmailService _email;
+        private readonly MainContext _context;
 
-        public CitiesController(ILogger<CitiesController> logger, IEmailService email)
+        public CitiesController(ILogger<CitiesController> logger, IEmailService email, MainContext context)
         {
             _logger = logger;
             _email = email;
+            _context = context;
         }
 
+        //[HttpGet]
+        //public ActionResult<IEnumerable<CityDTO>> GetCities()
+        //{
+        //    //_logger.LogInformation("No Property here");
+
+        //    //using (LogContext.PushProperty("SessionID", Guid.NewGuid()))
+        //    //{
+        //    //    //_logger.LogInformation("Getting all cities");
+        //    //    _logger.LogInformation("Getting all cities from data store");
+        //    //    _logger.LogInformation($"Number of cities in data store: {CitiesDataStore.Current.Count}");
+
+        //    //    _email.Send("Cities Retrieved", $"All cities were retrieved. Total count: {CitiesDataStore.Current.Count}");
+
+        //    //    return CitiesDataStore.Current;
+        //    //}
+
+        //    var cities = new List<CityDTO>();
+        //    cities.AddRange(_context.Cities.Select(c => new CityDTO
+        //    {
+        //        ID = c.Id,
+        //        Name = c.Name,
+        //        Description = c.Description,
+        //        Population = c.Population
+        //    }));
+
+        //    return Ok(cities);
+        //}
+
         [HttpGet]
-        public IEnumerable<CityDTO> GetCities()
+        public ActionResult<IEnumerable<CityWithoutLandMarkDTO>> GetCities()
         {
-            _logger.LogInformation("No Property here");
-
-            using (LogContext.PushProperty("SessionID", Guid.NewGuid()))
+            var cities = new List<CityWithoutLandMarkDTO>();
+            cities.AddRange(_context.Cities.Select(c => new CityWithoutLandMarkDTO
             {
-                //_logger.LogInformation("Getting all cities");
-                _logger.LogInformation("Getting all cities from data store");
-                _logger.LogInformation($"Number of cities in data store: {CitiesDataStore.Current.Count}");
+                ID = c.Id,
+                Name = c.Name,
+                Description = c.Description,
+                Population = c.Population
+            }));
 
-                _email.Send("Cities Retrieved", $"All cities were retrieved. Total count: {CitiesDataStore.Current.Count}");
-
-                return CitiesDataStore.Current;
-            }
+            return Ok(cities);
         }
 
         [HttpGet("{id}")]

@@ -2,6 +2,8 @@
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace ApiLesson4.Migrations
 {
     /// <inheritdoc />
@@ -17,7 +19,8 @@ namespace ApiLesson4.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
-                    Description = table.Column<string>(type: "TEXT", maxLength: 500, nullable: true)
+                    Description = table.Column<string>(type: "TEXT", maxLength: 500, nullable: true),
+                    Population = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -32,7 +35,8 @@ namespace ApiLesson4.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
                     Description = table.Column<string>(type: "TEXT", maxLength: 500, nullable: true),
-                    CityId = table.Column<int>(type: "INTEGER", nullable: false)
+                    CityId = table.Column<int>(type: "INTEGER", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -43,6 +47,26 @@ namespace ApiLesson4.Migrations
                         principalTable: "Cities",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "Cities",
+                columns: new[] { "Id", "Description", "Name", "Population" },
+                values: new object[,]
+                {
+                    { 1, "The city that never sleeps", "New York", 8000000 },
+                    { 2, "The city of love", "Paris", 2000000 },
+                    { 3, "The city of the rising sun", "Tokyo", 9000000 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "LandMarks",
+                columns: new[] { "Id", "CityId", "Description", "IsDeleted", "Name" },
+                values: new object[,]
+                {
+                    { 1, 1, "A symbol of freedom", false, "Statue of Liberty" },
+                    { 2, 2, "A global cultural icon of France", false, "Eiffel Tower" },
+                    { 3, 3, "A communications and observation tower", false, "Tokyo Tower" }
                 });
 
             migrationBuilder.CreateIndex(

@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApiLesson4.Migrations
 {
     [DbContext(typeof(MainContext))]
-    [Migration("20260507103958_NewProps")]
-    partial class NewProps
+    [Migration("20260507113236_InitialDB")]
+    partial class InitialDB
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -40,6 +40,29 @@ namespace ApiLesson4.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Cities");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Description = "The city that never sleeps",
+                            Name = "New York",
+                            Population = 8000000
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Description = "The city of love",
+                            Name = "Paris",
+                            Population = 2000000
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Description = "The city of the rising sun",
+                            Name = "Tokyo",
+                            Population = 9000000
+                        });
                 });
 
             modelBuilder.Entity("ApiLesson4.Entities.LandMark", b =>
@@ -68,6 +91,32 @@ namespace ApiLesson4.Migrations
                     b.HasIndex("CityId");
 
                     b.ToTable("LandMarks");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CityId = 1,
+                            Description = "A symbol of freedom",
+                            IsDeleted = false,
+                            Name = "Statue of Liberty"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CityId = 2,
+                            Description = "A global cultural icon of France",
+                            IsDeleted = false,
+                            Name = "Eiffel Tower"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CityId = 3,
+                            Description = "A communications and observation tower",
+                            IsDeleted = false,
+                            Name = "Tokyo Tower"
+                        });
                 });
 
             modelBuilder.Entity("ApiLesson4.Entities.LandMark", b =>
