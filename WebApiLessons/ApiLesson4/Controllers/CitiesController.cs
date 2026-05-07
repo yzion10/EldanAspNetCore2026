@@ -1,6 +1,7 @@
 ﻿using ApiLesson4.DataStores;
 using ApiLesson4.DbContexts;
 using ApiLesson4.DTO;
+using ApiLesson4.Repositories;
 using ApiLesson4.Services;
 using Microsoft.AspNetCore.Mvc;
 using Serilog.Context;
@@ -13,13 +14,13 @@ namespace ApiLesson4.Controllers
     {
         private readonly ILogger<CitiesController> _logger;
         private readonly IEmailService _email;
-        private readonly MainContext _context;
+        private readonly ICityRepository _cityRepository;
 
-        public CitiesController(ILogger<CitiesController> logger, IEmailService email, MainContext context)
+        public CitiesController(ILogger<CitiesController> logger, IEmailService email, ICityRepository cityRepository)
         {
             _logger = logger;
             _email = email;
-            _context = context;
+            _cityRepository = cityRepository;
         }
 
         //[HttpGet]
@@ -54,7 +55,8 @@ namespace ApiLesson4.Controllers
         public ActionResult<IEnumerable<CityWithoutLandMarkDTO>> GetCities()
         {
             var cities = new List<CityWithoutLandMarkDTO>();
-            cities.AddRange(_context.Cities.Select(c => new CityWithoutLandMarkDTO
+            cities.AddRange(_cityRepository.GetCitiesAsync().Result.
+                Select(c => new CityWithoutLandMarkDTO
             {
                 ID = c.Id,
                 Name = c.Name,

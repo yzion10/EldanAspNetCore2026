@@ -1,5 +1,6 @@
 
 using ApiLesson4.DbContexts;
+using ApiLesson4.Repositories;
 using ApiLesson4.Services;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
@@ -76,6 +77,9 @@ namespace ApiLesson4
             // כשנפנה לקונטרולר אחר יווצר מופע חדש של כל האובייקט
             // AddSingleton - כל פעם שנשתמש באובייקט נקבל את אותו מופע של כל האובייקט. נוצר פעם אחת בזיכרון
 
+            // ApiLesson4
+            //---------------------------------------------------------------------------------
+
             // נרצה להשתמש ב-AddDbContext במקום ב-AddScoped מכיוון ש-AddDbContext כבר מטפל בעצמו במחזור החיים של ה-DbContext ומוודא שהוא מתאים לסביבה של ה-Web API
             builder.Services.AddDbContext<MainContext>(optionsAction =>
             {
@@ -94,6 +98,8 @@ namespace ApiLesson4
             // dotnet ef database update
 
             // dotnet ef database update --migration "InitialDB" - כדי לעדכן את בסיס הנתונים למיגרציה ספציפית
+
+            builder.Services.AddScoped<ICityRepository, CityRepository>();
 
             var app = builder.Build();
 
