@@ -5,12 +5,14 @@
         private string _to;
         private string _from;
         private Guid _id;
+        IConfiguration _config;
 
-
-        public DevelopmentEmailService()
+        public DevelopmentEmailService(IConfiguration config)
         {
-            _to = "xxDev@email.com";
-            _from = "yyDev@email.com";
+            _config = config;
+
+            _to = _config["mail:to"];
+            _from = config["mail:from"];
 
             _id = Guid.NewGuid();
         }
