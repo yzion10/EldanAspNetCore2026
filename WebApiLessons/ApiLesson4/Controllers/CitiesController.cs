@@ -68,25 +68,46 @@ namespace ApiLesson4.Controllers
         }
 
         [HttpGet("{id}")]
-        public ActionResult<CityDTO> GetCity(int id)
+        public async Task<ActionResult<CityDTO>> GetCity(int id)
         {
-            _logger.LogInformation($"Getting city with ID {id}");
+            //_logger.LogInformation($"Getting city with ID {id}");
 
-            var city = CitiesDataStore.
-                Current.
-                FirstOrDefault(c => c.ID == id);
+            //var city = CitiesDataStore.
+            //    Current.
+            //    FirstOrDefault(c => c.ID == id);
+
+            //if (city == null)
+            //{
+            //    _logger.LogWarning($"City with ID {id} not found");
+            //    return NotFound();
+            //}
+
+            //_logger.LogInformation($"Returning city with ID {id}");
+
+            //_email.Send("City Retrieved", $"City with ID {id} was retrieved.");
+
+            //return city;
+
+            var city = await _cityRepository.GetCityByIdAsync(id, true);
 
             if (city == null)
-            {
-                _logger.LogWarning($"City with ID {id} not found");
                 return NotFound();
-            }
 
-            _logger.LogInformation($"Returning city with ID {id}");
+            CityDTO cityDTO = new CityDTO
+            {
+                ID = city.Id,
+                Name = city.Name,
+                Description = city.Description,
+                Population = city.Population,
+                LandMarks = city.LandMarks.Select(l => new LandMark
+                {
+                    Id = l.Id,
+                    Name = l.Name,
+                    Description = l.Description
+                }).ToList()
+            };
 
-            _email.Send("City Retrieved", $"City with ID {id} was retrieved.");
-
-            return city;
+            return Ok(cityDTO);
         }
 
         [HttpGet("GetCitiesHardCoded")]

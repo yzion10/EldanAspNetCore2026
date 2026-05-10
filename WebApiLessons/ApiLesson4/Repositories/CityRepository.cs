@@ -18,12 +18,22 @@ namespace ApiLesson4.Repositories
 
         public async Task<ICollection<City>> GetCitiesAsync()
         {
-            return await _context.Cities.ToListAsync();
+            //return await _context.Cities.OrderByDescending(c => c.Name).ToListAsync();
+            return await _context.Cities.OrderBy(c => c.Population).ToListAsync();
+        }
+
+        public async Task<City?> GetCityByIdAsync(int id, bool includeLandMarks)
+        {
+            if (includeLandMarks)
+                return await _context.Cities.Include(c => c.LandMarks).FirstOrDefaultAsync(c => c.Id == id); // זה בעצם join בין city ל landmark
+
+            return await _context.Cities.FirstOrDefaultAsync(c => c.Id == id);
         }
     }
 
     public interface ICityRepository
     {
         Task<ICollection<City>> GetCitiesAsync();
+        Task<City?> GetCityByIdAsync(int id, bool includeLandMarks);
     }
 }
