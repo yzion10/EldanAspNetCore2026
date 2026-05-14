@@ -9,5 +9,6 @@ namespace ApiLesson5_Shared.Repositories
         void DeleteProduct(int id);
         List<Product> GetAllProducts();
         Product? GetProductById(int id);
+        Product? Update(int id, Product updatedProduct);
     }
 }

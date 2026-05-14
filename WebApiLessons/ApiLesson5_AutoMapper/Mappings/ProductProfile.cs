@@ -11,6 +11,10 @@ namespace ApiLesson5_AutoMapper.Mappings
             // Create a mapping configuration between the Product domain model and the ProductDto
             CreateMap<Product, ProductDto>();
 
+            CreateMap<ProductCreateDto, Product>();
+
+            CreateMap<ProductUpdateDto, Product>();
+
             // Create a mapping configuration between the Feature domain model and the FeatureDto
             CreateMap<Feature, FeatureDto>().
                 ForMember(

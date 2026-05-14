@@ -115,5 +115,23 @@ namespace ApiLesson5_Shared.Repositories
                 Name = feature.Name
             };
         }
+
+        public Product? Update(int id, Product updatedProduct)
+        {
+            lock (_lock)
+            {
+                var existingProduct = _products.FirstOrDefault(p => p.Id == id);
+                if (existingProduct == null)
+                {
+                    return null;
+                }
+                existingProduct.Name = updatedProduct.Name;
+                existingProduct.Description = updatedProduct.Description;
+                existingProduct.Price = updatedProduct.Price;
+                existingProduct.Stock = updatedProduct.Stock;
+                existingProduct.Notes = updatedProduct.Notes;
+                return Clone(existingProduct);
+            }
+        }
     }
 }

@@ -41,5 +41,25 @@ namespace ApiLesson5_AutoMapper.Controllers
 
             return Ok(productDto);
         }
+
+        [HttpPost]
+        public ActionResult<ProductDto> CreateProduct(ProductCreateDto productCreateDto)
+        {
+            var product = _mapper.Map<Product>(productCreateDto);
+            var createdProduct = _productStorage.AddProduct(product);
+
+            var productDto = _mapper.Map<ProductDto>(createdProduct);
+            return Ok(productDto);
+        }
+
+        [HttpPut("{id}")]
+        public ActionResult<ProductDto> UpdateProduct(int id, ProductUpdateDto productUpdateDto)
+        {
+            var product = _mapper.Map<Product>(productUpdateDto);
+
+            var updatedProduct = _productStorage.Update(id, product);
+
+            return Ok(_mapper.Map<ProductDto>(updatedProduct));
+        }
     }
 }
