@@ -1,8 +1,11 @@
 ﻿using ApiLesson5.DataStores;
 using ApiLesson5.DTO;
+using ApiLesson5.Repositories;
 using ApiLesson5.Services;
+using AutoMapper;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace ApiLesson5.Controllers
 {
@@ -12,8 +15,12 @@ namespace ApiLesson5.Controllers
     {
         private readonly ILogger<LandMarksController> _logger;
         private readonly IEmailService _email;
+        private readonly IMapper _mapper;
+        private readonly ILandMarkRepository _landMarkRepository;
+        private readonly ICityRepository _cityRepository;
 
-        public LandMarksController(ILogger<LandMarksController> logger, IEmailService email)
+        public LandMarksController(ILogger<LandMarksController> logger, IEmailService email,
+            IMapper mapper, ILandMarkRepository landMarkRepository, ICityRepository cityRepository)
         {
             // לא חובה לבדוק כי זה לא יהיה null
             // אבל זה לא יזיק לבדוק
@@ -21,34 +28,23 @@ namespace ApiLesson5.Controllers
 
             _logger = logger;
             _email = email;
+            _mapper = mapper;
+            _landMarkRepository = landMarkRepository;
+            _cityRepository = cityRepository;
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<LandMarkDto>> GetLandMarks(int cityID)
+        public async Task<ActionResult<IEnumerable<LandMarkDto>>> GetLandMarks(int cityID)
         {
-            try
-            {
-                //throw new Exception("This is a test exception to demonstrate error handling and logging.");
+            // AutoMapper
 
-                var city = CitiesDataStore.Current.FirstOrDefault(c => c.ID == cityID);
+            var city = await _cityRepository.GetCityByIdAsync(cityID, false);
 
-                if (city == null)
-                {
-                    _logger.LogInformation($"City with ID {cityID} not found when trying to get landmarks");
-                    return NotFound();
-                }
-
-                _logger.LogInformation($"Returning {city.LandMarks.Count()} landmarks for city with ID {cityID}");
-
-                _email.Send("Landmarks Retrieved", $"Landmarks for city with ID {cityID} were retrieved.");
-
-                return Ok(city.LandMarks);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"An error occurred while getting landmarks for city with ID {cityID}");
-                return StatusCode(500, "An error occurred while processing your request.");
-            }
+            if (city == null)
+                return NotFound();
+            
+            var landMarks = await _landMarkRepository.GetLandMarksForCityAsync(cityID);
+            return Ok(_mapper.Map<IEnumerable<LandMarkDto>>(landMarks));
         }
 
         //[HttpGet("{landMarkID}", Name = "GetLandMark")]

@@ -103,7 +103,9 @@ namespace ApiLesson5
 
             // dotnet ef database update --migration "InitialDB" - כדי לעדכן את בסיס הנתונים למיגרציה ספציפית
 
+            
             builder.Services.AddScoped<ICityRepository, CityRepository>();
+            builder.Services.AddScoped<ILandMarkRepository, LandMarkRepository>();
 
             var app = builder.Build();
 
