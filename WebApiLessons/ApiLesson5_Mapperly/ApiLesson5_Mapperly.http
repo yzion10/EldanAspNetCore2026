@@ -1,0 +1,6 @@
+@ApiLesson5_Mapperly_HostAddress = http://localhost:5174
+
+GET {{ApiLesson5_Mapperly_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
