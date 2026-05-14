@@ -49,19 +49,19 @@ namespace ApiLesson5.Controllers
 
         //[HttpGet("{landMarkID}", Name = "GetLandMark")]
         [HttpGet("{landMarkID}")]
-        public ActionResult<LandMarkDto> GetLandMark(int cityID, int landMarkID)
+        public async Task<ActionResult<LandMarkDto>> GetLandMark(int cityID, int landMarkID)
         {
-            var city = CitiesDataStore.Current.FirstOrDefault(c => c.ID == cityID);
+            var city = await _cityRepository.GetCityByIdAsync(cityID, false);
 
             if (city == null)
                 return NotFound();
 
-            var landMark = city.LandMarks.FirstOrDefault(l => l.Id == landMarkID);
+            var landMark = await _landMarkRepository.GetLandMarkAsync(cityID, landMarkID);
 
             if (landMark == null)
                 return NotFound();
 
-            return Ok(landMark);
+            return Ok(_mapper.Map<LandMarkDto>(landMark));
         }
 
         [HttpPost]
