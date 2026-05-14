@@ -10,16 +10,16 @@ namespace ApiLesson5.DataStores
         {
             Current = new List<CityDTO>()
             {
-                new CityDTO{ID = 1, Name = "Tel-Aviv", LandMarks = new List<LandMark>
+                new CityDTO{ID = 1, Name = "Tel-Aviv", LandMarks = new List<LandMarkDto>
                 {
-                    new LandMark{Id = 1, Name = "Azrieli", Description = "A shopping mall"},
-                    new LandMark{Id = 2, Name = "Rothschild", Description = "A street"}
+                    new LandMarkDto{Id = 1, Name = "Azrieli", Description = "A shopping mall"},
+                    new LandMarkDto{Id = 2, Name = "Rothschild", Description = "A street"}
                 }
                 },
-                new CityDTO{ID = 2, Name = "Jerusalem", LandMarks = new List<LandMark>
+                new CityDTO{ID = 2, Name = "Jerusalem", LandMarks = new List<LandMarkDto>
                 {
-                    new LandMark{Id = 3, Name = "Western Wall", Description = "A religious site"},
-                    new LandMark{Id = 4, Name = "Dome of the Rock", Description = "An Islamic shrine"}
+                    new LandMarkDto{Id = 3, Name = "Western Wall", Description = "A religious site"},
+                    new LandMarkDto{Id = 4, Name = "Dome of the Rock", Description = "An Islamic shrine"}
                 }},
             };
         }

@@ -1,6 +1,6 @@
 ﻿namespace ApiLesson5.DTO
 {
-    public class LandMark
+    public class LandMarkDto
     {
         public int Id { get; set; }
         public string Name { get; set; }

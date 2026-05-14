@@ -24,7 +24,7 @@ namespace ApiLesson5.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<LandMark>> GetLandMarks(int cityID)
+        public ActionResult<IEnumerable<LandMarkDto>> GetLandMarks(int cityID)
         {
             try
             {
@@ -53,7 +53,7 @@ namespace ApiLesson5.Controllers
 
         //[HttpGet("{landMarkID}", Name = "GetLandMark")]
         [HttpGet("{landMarkID}")]
-        public ActionResult<LandMark> GetLandMark(int cityID, int landMarkID)
+        public ActionResult<LandMarkDto> GetLandMark(int cityID, int landMarkID)
         {
             var city = CitiesDataStore.Current.FirstOrDefault(c => c.ID == cityID);
 
@@ -69,21 +69,21 @@ namespace ApiLesson5.Controllers
         }
 
         [HttpPost]
-        public ActionResult<LandMark> AddLandMark(int cityID, LandMarkForCreateDTO newLandMark)
+        public ActionResult<LandMarkDto> AddLandMark(int cityID, LandMarkForCreateDTO newLandMark)
         {
             var city = CitiesDataStore.Current.FirstOrDefault(c => c.ID == cityID);
 
             if (city == null)
                 return NotFound();
 
-            var finalLandMark = new LandMark
+            var finalLandMark = new LandMarkDto
             {
                 Id = city.LandMarks.Max(l => l.Id) + 1,
                 Name = newLandMark.Name,
                 Description = newLandMark.Description
             };
 
-            ((List<LandMark>)city.LandMarks).Add(finalLandMark);
+            ((List<LandMarkDto>)city.LandMarks).Add(finalLandMark);
 
             //return Ok(finalLandMark);
 
@@ -162,7 +162,7 @@ namespace ApiLesson5.Controllers
             if (landMark == null)
                 return NotFound();
 
-            ((List<LandMark>)city.LandMarks).Remove(landMark);
+            ((List<LandMarkDto>)city.LandMarks).Remove(landMark);
             return NoContent();
         }
     }

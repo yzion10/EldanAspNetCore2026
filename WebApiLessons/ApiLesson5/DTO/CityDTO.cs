@@ -7,7 +7,7 @@
         public string? Description { get; set; }
         public int Population { get; set; }
 
-        public IEnumerable<LandMark> LandMarks { get; set; } = new List<LandMark>();
+        public IEnumerable<LandMarkDto> LandMarks { get; set; } = new List<LandMarkDto>();
         public int LandMarksCount => LandMarks.Count();
     }
 

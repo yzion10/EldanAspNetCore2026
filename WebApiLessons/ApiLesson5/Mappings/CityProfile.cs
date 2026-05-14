@@ -10,6 +10,7 @@ namespace ApiLesson5.Mappings
         {
             CreateMap<City, CityDTO>();
             CreateMap<City, CityWithoutLandMarkDTO>();
+            CreateMap<LandMark, LandMarkDto>();
         }
     }
 }

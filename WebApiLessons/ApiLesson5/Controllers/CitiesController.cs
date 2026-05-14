@@ -74,7 +74,7 @@ namespace ApiLesson5.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<CityDTO>> GetCity(int id)
+        public async Task<IActionResult> GetCity(int id, bool includeLandMarks = false)
         {
             //_logger.LogInformation($"Getting city with ID {id}");
 
@@ -94,26 +94,41 @@ namespace ApiLesson5.Controllers
 
             //return city;
 
-            var city = await _cityRepository.GetCityByIdAsync(id, true);
+            //var city = await _cityRepository.GetCityByIdAsync(id, true);
 
-            if (city == null)
-                return NotFound();
+            //if (city == null)
+            //    return NotFound();
 
-            CityDTO cityDTO = new CityDTO
+            //CityDTO cityDTO = new CityDTO
+            //{
+            //    ID = city.Id,
+            //    Name = city.Name,
+            //    Description = city.Description,
+            //    Population = city.Population,
+            //    LandMarks = city.LandMarks.Select(l => new LandMark
+            //    {
+            //        Id = l.Id,
+            //        Name = l.Name,
+            //        Description = l.Description
+            //    }).ToList()
+            //};
+
+            // AutoMapper
+
+            var city = await _cityRepository.GetCityByIdAsync(id, includeLandMarks);
+
+            if(includeLandMarks)
             {
-                ID = city.Id,
-                Name = city.Name,
-                Description = city.Description,
-                Population = city.Population,
-                LandMarks = city.LandMarks.Select(l => new LandMark
-                {
-                    Id = l.Id,
-                    Name = l.Name,
-                    Description = l.Description
-                }).ToList()
-            };
-
-            return Ok(cityDTO);
+                if (city == null)
+                    return NotFound();
+                return Ok(_mapper.Map<CityDTO>(city));
+            }
+            else
+            {
+                if (city == null)
+                    return NotFound();
+                return Ok(_mapper.Map<CityWithoutLandMarkDTO>(city));
+            }
         }
 
         [HttpGet("GetCitiesHardCoded")]
