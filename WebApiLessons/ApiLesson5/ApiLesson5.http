@@ -1,0 +1,6 @@
+@ApiLesson5_HostAddress = http://localhost:5129
+
+GET {{ApiLesson5_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
