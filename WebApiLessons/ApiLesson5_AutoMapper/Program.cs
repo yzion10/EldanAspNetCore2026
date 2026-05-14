@@ -18,18 +18,18 @@ namespace ApiLesson5_AutoMapper
             // Register the product storage service as a singleton
             builder.Services.AddSingleton<IProductStorage, ProductStorage>();
 
+            // Register AutoMapper and scan the current assembly for profiles
+            // license: https://automapper.org/docs/10.1.1/license.html
+            builder.Services.AddAutoMapper(_ => { }, typeof(Program));
+
             builder.Services.AddOpenApi();
             builder.Services.AddSwaggerGen();
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
-            {
-                app.MapOpenApi();
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
+            app.MapOpenApi();
+            app.UseSwagger();
+            app.UseSwaggerUI();
 
             app.UseHttpsRedirection();
 

@@ -1,4 +1,5 @@
 ﻿using ApiLesson5_Shared.Domain;
+using ApiLesson5_Shared.Dto;
 
 namespace ApiLesson5_Shared.Repositories
 {
