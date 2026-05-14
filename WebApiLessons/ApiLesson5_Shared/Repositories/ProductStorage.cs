@@ -7,10 +7,50 @@ namespace ApiLesson5_Shared.Repositories
     {
         private static List<Product> _products = new List<Product>
         {
-            new Product { Id = 1, Name = "Product 1", Description = "Description of Product 1", Price = 10.99m, Stock = 100, Notes = "Notes for Product 1" },
-            new Product { Id = 2, Name = "Product 2", Description = "Description of Product 2", Price = 20.99m, Stock = 50, Notes = "Notes for Product 2" },
-            new Product { Id = 3, Name = "Product 3", Description = "Description of Product 3", Price = 30.99m, Stock = 25, Notes = "Notes for Product 3" }
+            new Product
+            {
+                Id = 1,
+                Name = "Product 1",
+                Description = "Description of Product 1",
+                Price = 10.99m,
+                Stock = 100,
+                Notes = "Notes for Product 1",
+                Features = new List<Feature>
+                {
+                    new Feature { Id = 1, Name = "Feature 1"},
+                    new Feature { Id = 2, Name = "Feature 2"}
+                }
+            },
+            new Product
+            {
+                Id = 2,
+                Name = "Product 2",
+                Description = "Description of Product 2",
+                Price = 20.99m,
+                Stock = 50,
+                Notes = "Notes for Product 2",
+                Features = new List<Feature>
+                {
+                    new Feature { Id = 3, Name = "Feature 3"},
+                    new Feature { Id = 4, Name = "Feature 4"}
+                }   
+            },
+            new Product
+            {
+                Id = 3,
+                Name = "Product 3",
+                Description = "Description of Product 3",
+                Price = 30.99m,
+                Stock = 25,
+                Notes = "Notes for Product 3",
+                Features = new List<Feature>
+                {
+                    new Feature { Id = 5, Name = "Feature 5"},
+                    new Feature { Id = 6, Name = "Feature 6"}
+                }
+            }
         };
+
         private object _lock = new object();
 
         public List<Product> GetAllProducts()
@@ -62,7 +102,17 @@ namespace ApiLesson5_Shared.Repositories
                 Description = product.Description,
                 Price = product.Price,
                 Stock = product.Stock,
-                Notes = product.Notes
+                Notes = product.Notes,
+                Features = product.Features.Select(Clone).ToList()
+            };
+        }
+
+        private static Feature Clone(Feature feature)
+        {
+            return new Feature
+            {
+                Id = feature.Id,
+                Name = feature.Name
             };
         }
     }

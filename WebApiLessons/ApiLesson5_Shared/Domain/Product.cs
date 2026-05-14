@@ -8,5 +8,7 @@
         public decimal Price { get; set; }
         public int Stock { get; set; }
         public string Notes { get; set; } = string.Empty;
+
+        public List<Feature> Features { get; set; } = new List<Feature>();
     }
 }

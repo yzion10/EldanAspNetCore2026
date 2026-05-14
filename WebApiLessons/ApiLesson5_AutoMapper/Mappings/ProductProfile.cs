@@ -10,6 +10,12 @@ namespace ApiLesson5_AutoMapper.Mappings
         {
             // Create a mapping configuration between the Product domain model and the ProductDto
             CreateMap<Product, ProductDto>();
+
+            // Create a mapping configuration between the Feature domain model and the FeatureDto
+            CreateMap<Feature, FeatureDto>().
+                ForMember(
+                dest => dest.Description,
+                opt => opt.MapFrom(src => $"{src.Id} - {src.Name}")); // Custom mapping for the Description property in FeatureDto
         }
     }
 }

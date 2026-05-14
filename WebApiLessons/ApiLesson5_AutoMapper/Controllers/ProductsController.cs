@@ -26,6 +26,7 @@ namespace ApiLesson5_AutoMapper.Controllers
 
             var productDtos = _mapper.Map<List<ProductDto>>(products);
 
+
             return Ok(productDtos);
         }
 
