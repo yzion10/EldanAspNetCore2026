@@ -3,6 +3,7 @@ using ApiLesson5.DbContexts;
 using ApiLesson5.DTO;
 using ApiLesson5.Repositories;
 using ApiLesson5.Services;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Serilog.Context;
 
@@ -15,12 +16,14 @@ namespace ApiLesson5.Controllers
         private readonly ILogger<CitiesController> _logger;
         private readonly IEmailService _email;
         private readonly ICityRepository _cityRepository;
+        private readonly IMapper _mapper;
 
-        public CitiesController(ILogger<CitiesController> logger, IEmailService email, ICityRepository cityRepository)
+        public CitiesController(ILogger<CitiesController> logger, IEmailService email, ICityRepository cityRepository, IMapper mapper)
         {
             _logger = logger;
             _email = email;
             _cityRepository = cityRepository;
+            _mapper = mapper;
         }
 
         //[HttpGet]
@@ -54,17 +57,20 @@ namespace ApiLesson5.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<CityWithoutLandMarkDTO>> GetCities()
         {
-            var cities = new List<CityWithoutLandMarkDTO>();
-            cities.AddRange(_cityRepository.GetCitiesAsync().Result.
-                Select(c => new CityWithoutLandMarkDTO
-            {
-                ID = c.Id,
-                Name = c.Name,
-                Description = c.Description,
-                Population = c.Population
-            }));
+            //var cities = new List<CityWithoutLandMarkDTO>();
+            //cities.AddRange(_cityRepository.GetCitiesAsync().Result.
+            //    Select(c => new CityWithoutLandMarkDTO
+            //{
+            //    ID = c.Id,
+            //    Name = c.Name,
+            //    Description = c.Description,
+            //    Population = c.Population
+            //}));
 
-            return Ok(cities);
+            var cities = _cityRepository.GetCitiesAsync().Result;
+
+            // מיפוי city ל CityWithoutLandMarkDTO באמצעות AutoMapper
+            return Ok(_mapper.Map<List<CityWithoutLandMarkDTO>>(cities));
         }
 
         [HttpGet("{id}")]

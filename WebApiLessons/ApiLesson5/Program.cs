@@ -64,6 +64,10 @@ namespace ApiLesson5
 
             builder.Services.AddSingleton<FileExtensionContentTypeProvider>();
 
+            // AutoMapper
+            // license : https://automapper.org/#license
+            builder.Services.AddAutoMapper(_ => { }, typeof(Program));
+
             //#if DEBUG
             //builder.Services.AddTransient<IEmailService, DevelopmentEmailService>();
             //builder.Services.AddSingleton<IEmailService, DevelopmentEmailService>();
