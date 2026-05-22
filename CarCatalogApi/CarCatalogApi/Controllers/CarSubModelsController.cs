@@ -15,6 +15,8 @@ public class CarSubModelsController : ControllerBase
     private readonly ICarSubModelRepository _carSubModelRepository;
     private readonly IMapper _mapper;
     private readonly ILogger<CarSubModelsController> _logger;
+    private const string GetCarSubModelRouteName = "GetCarSubModel";
+    private const string SubModelNameExistsErrorMessage = "A sub model with the same name already exists for this model";
 
     public CarSubModelsController(IManufacturerRepository manufacturerRepository, ICarModelRepository carModelRepository, ICarSubModelRepository carSubModelRepository, IMapper mapper, ILogger<CarSubModelsController> logger)
     {
@@ -25,6 +27,10 @@ public class CarSubModelsController : ControllerBase
         _logger = logger;
     }
 
+    /// <summary>
+    /// מחזיר את כל תת הדגמים של דגם רכב מסוים
+    /// אם היצרן או הדגם לא קיימים תחזור תשובת 404 ללקוח
+    /// </summary>
     [HttpGet]
     public async Task<ActionResult<IEnumerable<CarSubModelDto>>> GetSubModelsForModel(int manufacturerId, int modelId)
     {
@@ -35,6 +41,9 @@ public class CarSubModelsController : ControllerBase
         return Ok(_mapper.Map<IEnumerable<CarSubModelDto>>(subModels));
     }
 
+    /// <summary>
+    /// מחזיר תת דגם רכב לפי מזהה
+    /// </summary>
     [HttpGet("{subModelId}")]
     public async Task<ActionResult<CarSubModelDto>> GetCarSubModel(int manufacturerId, int modelId, int subModelId)
     {
@@ -52,6 +61,10 @@ public class CarSubModelsController : ControllerBase
         return Ok(_mapper.Map<CarSubModelDto>(subModel));
     }
 
+    /// <summary>
+    /// יצירת תת דגם חדש לדגם רכב מסוים
+    /// שם תת הדגם חייב להיות ייחודי בתוך הדגם, אחרת תחזור שגיאת וולידציה ללקוח
+    /// </summary>
     [HttpPost]
     public async Task<ActionResult<CarSubModelDto>> CreateSubModelForModel(int manufacturerId, int modelId, CarSubModelForCreateDto subModelForCreate)
     {
@@ -60,7 +73,7 @@ public class CarSubModelsController : ControllerBase
 
         if (await _carSubModelRepository.SubModelNameExistsForModelAsync(modelId, subModelForCreate.Name))
         {
-            ModelState.AddModelError(nameof(subModelForCreate.Name), "A sub model with the same name already exists for this model");
+            ModelState.AddModelError(nameof(subModelForCreate.Name), SubModelNameExistsErrorMessage);
             return ValidationProblem(ModelState);
         }
 
@@ -74,9 +87,12 @@ public class CarSubModelsController : ControllerBase
         var savedSubModel = await _carSubModelRepository.GetSubModelForModelAsync(modelId, subModel.Id);
         var subModelToReturn = _mapper.Map<CarSubModelDto>(savedSubModel);
 
-        return CreatedAtRoute("GetCarSubModel", new { manufacturerId, modelId, subModelId = subModel.Id }, subModelToReturn);
+        return CreatedAtRoute(GetCarSubModelRouteName, new { manufacturerId, modelId, subModelId = subModel.Id }, subModelToReturn);
     }
 
+    /// <summary>
+    /// עדכון תת דגם קיים של דגם רכב מסוים
+    /// </summary>
     [HttpPut("{subModelId}")]
     public async Task<ActionResult> UpdateSubModelForModel(int manufacturerId, int modelId, int subModelId, CarSubModelForUpdateDto subModelForUpdate)
     {
@@ -90,7 +106,7 @@ public class CarSubModelsController : ControllerBase
 
         if (await _carSubModelRepository.SubModelNameExistsForModelAsync(modelId, subModelForUpdate.Name, subModelId))
         {
-            ModelState.AddModelError(nameof(subModelForUpdate.Name), "A sub model with the same name already exists for this model");
+            ModelState.AddModelError(nameof(subModelForUpdate.Name), SubModelNameExistsErrorMessage);
             return ValidationProblem(ModelState);
         }
 
@@ -101,6 +117,9 @@ public class CarSubModelsController : ControllerBase
         return NoContent();
     }
 
+    /// <summary>
+    /// מחיקת תת דגם קיים של דגם רכב מסוים
+    /// </summary>
     [HttpDelete("{subModelId}")]
     public async Task<ActionResult> DeleteSubModelForModel(int manufacturerId, int modelId, int subModelId)
     {
@@ -126,10 +145,7 @@ public class CarSubModelsController : ControllerBase
         if (!await _manufacturerRepository.ManufacturerExistsAsync(manufacturerId))
             return false;
 
-        var carModel = await _carModelRepository.GetModelForManufacturerAsync(
-            manufacturerId,
-            modelId,
-            includeSubModels: false);
+        var carModel = await _carModelRepository.GetModelForManufacturerAsync(manufacturerId, modelId, false);
 
         return carModel != null;
     }
