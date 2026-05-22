@@ -32,6 +32,7 @@ public class Program
         app.MapOpenApi();
         app.UseSwagger();
         app.UseSwaggerUI();
+        //app.UseExceptionHandler();
 
         app.UseHttpsRedirection();
         app.UseAuthorization();
