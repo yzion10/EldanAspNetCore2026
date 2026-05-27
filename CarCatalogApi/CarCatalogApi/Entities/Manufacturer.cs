@@ -2,6 +2,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CarCatalogApi.Entities;
 
+/// <summary>
+/// יצרנים - מייצג את הטבלה בבסיס הנתונים
+/// </summary>
 public class Manufacturer
 {
     public int Id { get; set; }

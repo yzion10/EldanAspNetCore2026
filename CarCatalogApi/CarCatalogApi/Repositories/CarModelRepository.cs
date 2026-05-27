@@ -4,6 +4,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CarCatalogApi.Repositories;
 
+/// <summary>
+/// מחלקה שאחראית לרכז את הלוגיקה של דגמים מול בסיס הנתונים
+/// באמצעות Entity Framework
+/// </summary>
 public class CarModelRepository : RepositoryBase, ICarModelRepository
 {
     public CarModelRepository(CarCatalogDbContext context)
