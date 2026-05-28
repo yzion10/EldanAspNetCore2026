@@ -10,6 +10,7 @@ namespace ApiLesson6.Repositories
     public class CityRepository : ICityRepository
     {
         private readonly MainContext _context;
+        const int maxPageSize = 10;
 
         public CityRepository(MainContext context)
         {
@@ -22,11 +23,16 @@ namespace ApiLesson6.Repositories
             return await _context.Cities.OrderBy(c => c.Population).ToListAsync();
         }
 
-        public async Task<ICollection<City>> GetCitiesAsync(string? name, string? search)
+        // Tuple - מבנה נתונים שמכיל כמה ערכים שונים, במקרה הזה רשימת ערים ומטה-דאטה של עמודים
+        public async Task<(ICollection<City> Cities, PagingMetadata PagingMetadata)> GetCitiesAsync(
+            string? name, string? search,
+            int? pageNumber = 1, int? pageSize = maxPageSize)
         {
             var cities = _context.Cities.AsQueryable();
             //var cities = _context.Cities.ToList(); // לא יעיל - מעלה את כל הערים ואז בזיכרון עושה עליו את התחימות
 
+            if (pageSize > maxPageSize)
+                pageSize = maxPageSize; // הגבלת מספר הערים שמוחזרות ללקוח
 
             if (!string.IsNullOrEmpty(name))
                 cities = cities.Where(c => c.Name.Equals(name));
@@ -37,7 +43,14 @@ namespace ApiLesson6.Repositories
                 cities = cities.Where(c => c.Name.Contains(search) || (c.Description != null && c.Description.Contains(search)));
             }
 
-            return await cities.OrderByDescending(c => c.Name).ToListAsync();
+            var totalItemCount = await cities.CountAsync();
+            var metadata = new PagingMetadata(totalItemCount, pageSize ?? maxPageSize, pageNumber ?? 1);
+
+            cities = cities.
+                            Skip(((pageNumber ?? 1) - 1) * (pageSize ?? maxPageSize)).
+                            Take(pageSize ?? maxPageSize);
+
+            return (await cities.OrderByDescending(c => c.Name).ToListAsync(), metadata);
         }
 
         public async Task<City?> GetCityByIdAsync(int id, bool includeLandMarks)
@@ -52,7 +65,7 @@ namespace ApiLesson6.Repositories
     public interface ICityRepository
     {
         Task<ICollection<City>> GetCitiesAsync();
-        Task<ICollection<City>> GetCitiesAsync(string? name, string? search);
+        Task<(ICollection<City> Cities, PagingMetadata PagingMetadata)> GetCitiesAsync(string? name, string? search, int? pageNumber, int? pageSize);
         Task<City?> GetCityByIdAsync(int id, bool includeLandMarks);
     }
 }

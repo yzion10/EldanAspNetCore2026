@@ -6,6 +6,7 @@ using ApiLesson6.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Serilog.Context;
+using System.Text.Json;
 
 namespace ApiLesson6.Controllers
 {
@@ -55,11 +56,23 @@ namespace ApiLesson6.Controllers
         //}
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CityWithoutLandMarkDTO>>> GetCities(/*[FromQuery(Name = "queryame")]*/ string? name, string? search)
+        public async Task<ActionResult<IEnumerable<CityWithoutLandMarkDTO>>> GetCities(/*[FromQuery(Name = "queryame")]*/ 
+            string? name, string? search, int? pageNumber, int? pageSize)
         {
-            var cities = await _cityRepository.GetCitiesAsync(name, search);
+            var (cities, metadata) = await _cityRepository.GetCitiesAsync(name, search, pageNumber, pageSize);
 
             // מיפוי city ל CityWithoutLandMarkDTO באמצעות AutoMapper
+            //return Ok(_mapper.Map<List<CityWithoutLandMarkDTO>>(cities));
+            
+            // option 1
+            //return Ok(new
+            //{
+            //    data = _mapper.Map<List<CityWithoutLandMarkDTO>>(cities),
+            //    PagingMetadata = metadata
+            //});
+
+            // option 2 - הוספת המטה-דאטה בהדר של התגובה
+            Response.Headers.Append("X-Pagination", JsonSerializer.Serialize(metadata));
             return Ok(_mapper.Map<List<CityWithoutLandMarkDTO>>(cities));
         }
 
