@@ -22,6 +22,24 @@ namespace ApiLesson6.Repositories
             return await _context.Cities.OrderBy(c => c.Population).ToListAsync();
         }
 
+        public async Task<ICollection<City>> GetCitiesAsync(string? name, string? search)
+        {
+            var cities = _context.Cities.AsQueryable();
+            //var cities = _context.Cities.ToList(); // לא יעיל - מעלה את כל הערים ואז בזיכרון עושה עליו את התחימות
+
+
+            if (!string.IsNullOrEmpty(name))
+                cities = cities.Where(c => c.Name.Equals(name));
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                search = search.Trim();
+                cities = cities.Where(c => c.Name.Contains(search) || (c.Description != null && c.Description.Contains(search)));
+            }
+
+            return await cities.OrderByDescending(c => c.Name).ToListAsync();
+        }
+
         public async Task<City?> GetCityByIdAsync(int id, bool includeLandMarks)
         {
             if (includeLandMarks)
@@ -34,6 +52,7 @@ namespace ApiLesson6.Repositories
     public interface ICityRepository
     {
         Task<ICollection<City>> GetCitiesAsync();
+        Task<ICollection<City>> GetCitiesAsync(string? name);
         Task<City?> GetCityByIdAsync(int id, bool includeLandMarks);
     }
 }
