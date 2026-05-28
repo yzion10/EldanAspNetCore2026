@@ -11,6 +11,8 @@ namespace ApiLesson6.Mappings
             CreateMap<City, CityDTO>();
             CreateMap<City, CityWithoutLandMarkDTO>();
             CreateMap<LandMark, LandMarkDto>();
+            CreateMap<LandMarkForCreateDTO, LandMark>();
+            CreateMap<LandMarkForUpdateDTO, LandMark>();
         }
     }
 }

@@ -23,20 +23,31 @@ namespace ApiLesson6.Repositories
             return await _context.LandMarks.FirstOrDefaultAsync(l => l.CityId == cityId && l.Id == landMarkId);
         }
 
-        public async Task AddLandMarkAsync(int cityId, LandMark landMark)
+        public async Task AddLandMarkAsync(int cityId, LandMark landMark, bool autoSave = true)
         {
             var city = await _context.Cities.FirstOrDefaultAsync(c => c.Id == cityId);
 
             if (city != null)
                 city.LandMarks.Add(landMark);
+
+            if (autoSave)
+                await Save();
         }
 
-        public async Task Delete(int cityId, LandMark landMark)
+        public async Task Delete(int cityId, LandMark landMark, bool autoSave = true)
         {
             var city = await _context.Cities.FirstOrDefaultAsync(c => c.Id == cityId);
 
             if (city != null)
                 city.LandMarks.Remove(landMark);
+
+            if (autoSave)
+                await Save();
+        }
+
+        public async Task Save()
+        {
+            await _context.SaveChangesAsync();
         }
     }
 }

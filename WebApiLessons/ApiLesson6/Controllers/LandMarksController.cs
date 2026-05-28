@@ -1,5 +1,6 @@
 ﻿using ApiLesson6.DataStores;
 using ApiLesson6.DTO;
+using ApiLesson6.Entities;
 using ApiLesson6.Repositories;
 using ApiLesson6.Services;
 using AutoMapper;
@@ -65,49 +66,30 @@ namespace ApiLesson6.Controllers
         }
 
         [HttpPost]
-        public ActionResult<LandMarkDto> AddLandMark(int cityID, LandMarkForCreateDTO newLandMark)
+        public async Task<ActionResult<LandMarkDto>> AddLandMark(int cityID, LandMarkForCreateDTO newLandMark)
         {
-            var city = CitiesDataStore.Current.FirstOrDefault(c => c.ID == cityID);
+            var landMarkEntity = _mapper.Map<LandMark>(newLandMark);
 
-            if (city == null)
-                return NotFound();
+            await _landMarkRepository.AddLandMarkAsync(cityID, landMarkEntity);
 
-            var finalLandMark = new LandMarkDto
-            {
-                Id = city.LandMarks.Max(l => l.Id) + 1,
-                Name = newLandMark.Name,
-                Description = newLandMark.Description
-            };
-
-            ((List<LandMarkDto>)city.LandMarks).Add(finalLandMark);
-
-            //return Ok(finalLandMark);
-
-            // נעדיף להחזיר 201 Created
-            // עם כתובת המשאב החדש
-            //return CreatedAtRoute("GetLandMark",
-            //    new { cityID = cityID, landMarkID = finalLandMark.Id }, finalLandMark);
-
-            // נעדיף להשתמש ב- CreatedAtAction שמאפשר לנו להצביע על הפעולה שמחזירה את המשאב החדש
-            // במקום להגדיר שם לנתיב, נצביע על הפעולה שמחזירה את המשאב החדש
-            return CreatedAtAction(nameof(GetLandMark),
-                new { cityID = cityID, landMarkID = finalLandMark.Id }, finalLandMark);
+            return CreatedAtAction(nameof(GetLandMark), new { cityID, landMarkID = landMarkEntity.Id },
+                _mapper.Map<LandMarkDto>(landMarkEntity));
         }
 
         [HttpPut("{landMarkID}")]
-        public ActionResult UpdateLandMark(int cityID, int landMarkID,
-            LandMarkForUpdateDTO updatedLandMark)
+        public async Task<ActionResult> UpdateLandMark(int cityID, int landMarkID, LandMarkForUpdateDTO updatedLandMark)
         {
-            var city = CitiesDataStore.Current.FirstOrDefault(c => c.ID == cityID);
-            if (city == null)
+            if (await _cityRepository.GetCityByIdAsync(cityID, false) == null)
                 return NotFound();
 
-            var landMark = city.LandMarks.FirstOrDefault(l => l.Id == landMarkID);
-            if (landMark == null)
+            var landMarkEntity = await _landMarkRepository.GetLandMarkAsync(cityID, landMarkID);
+
+            if (landMarkEntity == null)
                 return NotFound();
 
-            landMark.Name = updatedLandMark.Name ?? landMark.Name;
-            landMark.Description = updatedLandMark.Description;
+            _mapper.Map(updatedLandMark, landMarkEntity);
+
+            await _landMarkRepository.Save();
 
             return NoContent();
         }
@@ -148,17 +130,17 @@ namespace ApiLesson6.Controllers
         }
 
         [HttpDelete("{landMarkID}")]
-        public ActionResult DeleteLandMark(int cityID, int landMarkID)
+        public async Task <ActionResult> DeleteLandMark(int cityID, int landMarkID)
         {
-            var city = CitiesDataStore.Current.FirstOrDefault(c => c.ID == cityID);
-            if (city == null)
+           if(await _landMarkRepository.GetLandMarkAsync(cityID, landMarkID) == null)
                 return NotFound();
 
-            var landMark = city.LandMarks.FirstOrDefault(l => l.Id == landMarkID);
-            if (landMark == null)
+            var landMartToDelete = await _landMarkRepository.GetLandMarkAsync(cityID, landMarkID);
+
+            if (landMartToDelete == null)
                 return NotFound();
 
-            ((List<LandMarkDto>)city.LandMarks).Remove(landMark);
+            await _landMarkRepository.Delete(cityID, landMartToDelete);
             return NoContent();
         }
     }
