@@ -52,7 +52,7 @@ namespace ApiLesson6.Repositories
     public interface ICityRepository
     {
         Task<ICollection<City>> GetCitiesAsync();
-        Task<ICollection<City>> GetCitiesAsync(string? name);
+        Task<ICollection<City>> GetCitiesAsync(string? name, string? search);
         Task<City?> GetCityByIdAsync(int id, bool includeLandMarks);
     }
 }

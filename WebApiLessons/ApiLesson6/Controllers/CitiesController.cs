@@ -55,9 +55,9 @@ namespace ApiLesson6.Controllers
         //}
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CityWithoutLandMarkDTO>>> GetCities(/*[FromQuery(Name = "queryame")]*/ string? name)
+        public async Task<ActionResult<IEnumerable<CityWithoutLandMarkDTO>>> GetCities(/*[FromQuery(Name = "queryame")]*/ string? name, string? search)
         {
-            var cities = await _cityRepository.GetCitiesAsync(name);
+            var cities = await _cityRepository.GetCitiesAsync(name, search);
 
             // מיפוי city ל CityWithoutLandMarkDTO באמצעות AutoMapper
             return Ok(_mapper.Map<List<CityWithoutLandMarkDTO>>(cities));
