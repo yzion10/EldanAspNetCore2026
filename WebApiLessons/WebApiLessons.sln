@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiLesson5_Mapperly", "ApiL
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiLesson6", "ApiLesson6\ApiLesson6.csproj", "{5AF0C482-9E17-7AC0-3EB1-94C0E05B5169}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiLesson7", "ApiLesson7\ApiLesson7.csproj", "{24F3CAA2-D465-4E63-AA6C-92BF82C96D38}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,6 +71,10 @@ Global
 		{5AF0C482-9E17-7AC0-3EB1-94C0E05B5169}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5AF0C482-9E17-7AC0-3EB1-94C0E05B5169}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5AF0C482-9E17-7AC0-3EB1-94C0E05B5169}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24F3CAA2-D465-4E63-AA6C-92BF82C96D38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24F3CAA2-D465-4E63-AA6C-92BF82C96D38}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24F3CAA2-D465-4E63-AA6C-92BF82C96D38}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24F3CAA2-D465-4E63-AA6C-92BF82C96D38}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
