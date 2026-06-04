@@ -14,7 +14,7 @@ namespace ApiLesson7.Controllers
     {
         private readonly List<User> _users = new List<User>
         {
-            new User { FirstName = "Admin", LastName = "User", UserName = "admin", Password = "admin" },
+            new User { FirstName = "Admin", LastName = "User", UserName = "admin", Password = "admin", IsAdmin = true },
             new User { FirstName = "yosi", LastName = "Doe", UserName = "yosi", Password = "1234" }
         };
 
@@ -50,8 +50,8 @@ namespace ApiLesson7.Controllers
                 new Claim(ClaimTypes.Surname, user.LastName),
                 new Claim(JwtRegisteredClaimNames.Iss, _configuration["Authentication:Issuer"] ?? throw new InvalidOperationException("Issuer is not configured")),
                 new Claim(JwtRegisteredClaimNames.Aud, _configuration["Authentication:Audience"] ?? throw new InvalidOperationException("Audience is not configured")),
-                new Claim(ClaimTypes.Role, user.IsAdmin ? "Admin" : "User"),
-                new Claim("password", user.Password)
+                new Claim("IsAdmin", user.IsAdmin ? "Admin" : "User"),
+                //new Claim("password", user.Password) // לא לבצע את זה. זה רק להדגמה
             };
 
             // create a JWT token with the claims, an expiration time of 30 minutes, and the signing credentials

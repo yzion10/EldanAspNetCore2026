@@ -29,34 +29,6 @@ namespace ApiLesson7.Controllers
             _mapper = mapper;
         }
 
-        //[HttpGet]
-        //public ActionResult<IEnumerable<CityDTO>> GetCities()
-        //{
-        //    //_logger.LogInformation("No Property here");
-
-        //    //using (LogContext.PushProperty("SessionID", Guid.NewGuid()))
-        //    //{
-        //    //    //_logger.LogInformation("Getting all cities");
-        //    //    _logger.LogInformation("Getting all cities from data store");
-        //    //    _logger.LogInformation($"Number of cities in data store: {CitiesDataStore.Current.Count}");
-
-        //    //    _email.Send("Cities Retrieved", $"All cities were retrieved. Total count: {CitiesDataStore.Current.Count}");
-
-        //    //    return CitiesDataStore.Current;
-        //    //}
-
-        //    var cities = new List<CityDTO>();
-        //    cities.AddRange(_context.Cities.Select(c => new CityDTO
-        //    {
-        //        ID = c.Id,
-        //        Name = c.Name,
-        //        Description = c.Description,
-        //        Population = c.Population
-        //    }));
-
-        //    return Ok(cities);
-        //}
-
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CityWithoutLandMarkDTO>>> GetCities(/*[FromQuery(Name = "queryame")]*/ 
             string? name, string? search, int? pageNumber, int? pageSize)
@@ -81,42 +53,11 @@ namespace ApiLesson7.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetCity(int id, bool includeLandMarks = false)
         {
-            //_logger.LogInformation($"Getting city with ID {id}");
+            // Auth
+            var userRole = User.Claims.FirstOrDefault(c => c.Type == "IsAdmin")?.Value;
 
-            //var city = CitiesDataStore.
-            //    Current.
-            //    FirstOrDefault(c => c.ID == id);
-
-            //if (city == null)
-            //{
-            //    _logger.LogWarning($"City with ID {id} not found");
-            //    return NotFound();
-            //}
-
-            //_logger.LogInformation($"Returning city with ID {id}");
-
-            //_email.Send("City Retrieved", $"City with ID {id} was retrieved.");
-
-            //return city;
-
-            //var city = await _cityRepository.GetCityByIdAsync(id, true);
-
-            //if (city == null)
-            //    return NotFound();
-
-            //CityDTO cityDTO = new CityDTO
-            //{
-            //    ID = city.Id,
-            //    Name = city.Name,
-            //    Description = city.Description,
-            //    Population = city.Population,
-            //    LandMarks = city.LandMarks.Select(l => new LandMark
-            //    {
-            //        Id = l.Id,
-            //        Name = l.Name,
-            //        Description = l.Description
-            //    }).ToList()
-            //};
+            if(userRole!= "Admin")
+                return Forbid();
 
             // AutoMapper
 
