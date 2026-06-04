@@ -148,6 +148,17 @@ namespace ApiLesson7
                 });
             });
 
+
+            // versioning
+            builder.Services.AddApiVersioning(options =>
+            {
+                options.ReportApiVersions = true; // נרצה שהשרת ידווח על הגרסאות הנתמכות ב-header של התגובה
+                options.AssumeDefaultVersionWhenUnspecified = true; // נרצה שהשרת יניח שהלקוח מתכוון לגרסה ברירת מחדל אם הוא לא מציין גרסה בבקשה
+                options.DefaultApiVersion = new(1); // נרצה להגדיר גרסה ברירת מחדל שתשמש כאשר הלקוח לא מציין גרסה בבקשה
+
+            }).AddMvc();
+
+
             var app = builder.Build();
 
             // הרצת המיגרציות אוטומטית עם הרצת האפליקציה

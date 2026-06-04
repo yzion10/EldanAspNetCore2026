@@ -3,6 +3,7 @@ using ApiLesson7.DbContexts;
 using ApiLesson7.DTO;
 using ApiLesson7.Repositories;
 using ApiLesson7.Services;
+using Asp.Versioning;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +12,8 @@ using System.Text.Json;
 
 namespace ApiLesson7.Controllers
 {
-    [Authorize] // הוספת אטריביוט של הרשאה לכל הפעולות בקונטרולר זה
+    //[Authorize] // הוספת אטריביוט של הרשאה לכל הפעולות בקונטרולר זה
+    [ApiVersion(1)]
     [ApiController]
     [Route("api/cities")]
     public class CitiesController : ControllerBase

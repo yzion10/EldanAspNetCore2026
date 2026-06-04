@@ -1,5 +1,6 @@
 ﻿using ApiLesson7.DTO;
 using ApiLesson7.Entities;
+using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -8,8 +9,12 @@ using System.Text;
 
 namespace ApiLesson7.Controllers
 {
+    //[ApiVersion(2)] // הגדרת גרסת API עבור הקונטרולר הזה לגרסה 2
     [ApiController]
-    [Route("api/auth")]
+    //[Route("api/auth")]
+    [Route("api/v{version:apiVersion}/auth")] // הגדרת גרסת API בנתיב של הקונטרולר
+    [ApiVersion(1)]
+    [ApiVersion(2)]
     public class AuthController : ControllerBase
     {
         private readonly List<User> _users = new List<User>
@@ -23,6 +28,20 @@ namespace ApiLesson7.Controllers
         public AuthController(IConfiguration configuration)
         {
             _configuration = configuration;
+        }
+
+        [HttpGet("something")]
+        [MapToApiVersion(1)] // מיפוי הפעולה הזו לגרסה 1 של ה-API
+        public ActionResult<string> GetSomething()
+        {
+            return Ok("This is something");
+        }
+
+        [HttpGet("something")]
+        [MapToApiVersion(2)] // מיפוי הפעולה הזו לגרסה 2 של ה-API
+        public ActionResult<string> GetSomething2()
+        {
+            return Ok("This is something for version 2");
         }
 
         [HttpPost("login")]
