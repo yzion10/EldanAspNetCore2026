@@ -138,6 +138,14 @@ namespace ApiLesson7
                     };
                 });
 
+            // נשתמש בזה איפה שנרצה להגביל פניה לשירות מסוים על פי גישה
+            builder.Services.AddAuthorization(options =>
+            {
+                options.AddPolicy("AdminOnly", policy =>
+                {
+                    policy.RequireClaim("IsAdmin", "Admin"); // נרצה לוודא שהמשתמש מכיל את התפקיד "admin" כדי לעמוד בתנאי המדיניות הזו
+                });
+            });
 
             var app = builder.Build();
 
