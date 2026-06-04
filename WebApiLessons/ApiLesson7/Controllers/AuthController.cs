@@ -37,7 +37,7 @@ namespace ApiLesson7.Controllers
             var configKey = _configuration["Authentication:SecretKey"];
 
             // create a symmetric security key using the secret key
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configKey));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configKey) ?? throw new InvalidOperationException("SecretKey is not configured"));
 
             // create signing credentials using the security key and the HMAC-SHA256 algorithm
             var signingCreds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -57,8 +57,13 @@ namespace ApiLesson7.Controllers
             // create a JWT token with the claims, an expiration time of 30 minutes, and the signing credentials
             var token = new JwtSecurityToken(
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(30),
+                expires: DateTime.Now.AddMinutes(30), // הגדרת זמן תפוגה של הטוקן ל-30 דקות
                 signingCredentials: signingCreds
+
+                // אם רוצים לנהל טוקן ללא
+                // לוגין אלא טוקן בנפרד שאני מספק ללקוח עם טווח תפוגה של ממתי עד מתי הטוקן תקף אלו הפקודות:
+                //expires: new DateTime(2027, 01, 20), // הגדרת זמן תפוגה של הטוקן לתאריך מסוים
+                //notBefore: new DateTime(2027, 01, 10) // הגדרת זמן התחלה של הטוקן לתאריך מסוים
             );
 
             var tokenString = new JwtSecurityTokenHandler().WriteToken(token);

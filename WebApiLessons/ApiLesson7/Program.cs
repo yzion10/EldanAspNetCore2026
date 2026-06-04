@@ -128,6 +128,13 @@ namespace ApiLesson7
                         // נוכל להגדיר את ה-secret key בקובץ appsettings.json או ב-User Secrets
                         IssuerSigningKey = new SymmetricSecurityKey(
                             Encoding.UTF8.GetBytes(builder.Configuration["Authentication:SecretKey"] ?? throw new InvalidOperationException("SecretKey is not configured"))),
+
+                        // יש להגדיר את זה כאשר אנחנו רוצים לוודא שהטוקן לא פג תוקף
+                        ValidateLifetime = true, // נרצה לוודא שהטוקן לא פג תוקף
+
+                        //ClockSkew = TimeSpan.Zero // נרצה להגדיר את זה ל-Zero כדי למנוע מצב שבו הטוקן עדיין תקף למשך זמן מסוים לאחר שפג תוקפו בפועל
+                        RequireExpirationTime = true, // נרצה לוודא שהטוקן מכיל תאריך תפוגה כדי למנוע מצב שבו טוקן תקף לנצח
+                        ValidAlgorithms = new[] { SecurityAlgorithms.HmacSha256 } // נרצה לוודא שהטוקן נחתם עם אלגוריתם שאנחנו מצפים לו
                     };
                 });
 
