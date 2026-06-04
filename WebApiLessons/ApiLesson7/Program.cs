@@ -143,6 +143,7 @@ namespace ApiLesson7
             {
                 options.AddPolicy("AdminOnly", policy =>
                 {
+                    policy.RequireAuthenticatedUser(); // נרצה לוודא שהמשתמש מאומת כדי לעמוד בתנאי המדיניות הזו
                     policy.RequireClaim("IsAdmin", "Admin"); // נרצה לוודא שהמשתמש מכיל את התפקיד "admin" כדי לעמוד בתנאי המדיניות הזו
                 });
             });
